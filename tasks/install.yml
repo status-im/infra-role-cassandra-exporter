@@ -1,0 +1,18 @@
+---
+- name: Install OpenJDK8
+  apt:
+    name: openjdk-8-jre-headless
+
+- name: Create install directory
+  file:
+    path: '{{ cassandra_exp_install_dir }}'
+    owner: '{{ cassandra_exp_service_user }}'
+    group: 'adm'
+    state: 'directory'
+
+- name: Download Cassandra Exporter JAR
+  get_url:
+    url: '{{ cassandra_exp_url }}'
+    dest: '{{ cassandra_exp_install_dir }}/cassandra_exporter.jar'
+    checksum: 'sha256:{{ cassandra_exp_jar_sha256 }}'
+    mode: '0755'

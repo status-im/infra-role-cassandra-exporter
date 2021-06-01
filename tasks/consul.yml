@@ -1,0 +1,16 @@
+---
+- name: Create Consul service definition
+  include_role: name=consul-service
+  vars:
+    consul_config_name: '{{ cassandra_exp_service_name }}'
+    consul_services:
+      - name: '{{ cassandra_exp_service_name }}'
+        tags: ['cassandra', 'logs']
+        # we advertise the port with basic auth
+        port: '{{ cassandra_exp_listen_port }}'
+        address: '{{ ansible_local.wireguard.vpn_ip }}'
+        checks:
+          - id: '{{ cassandra_exp_service_name }}-health'
+            name: Cassandra Exporter Healthcheck
+            type: script
+            script: '/bin/systemctl is-active {{ cassandra_exp_service_name }}'

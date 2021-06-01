@@ -1,0 +1,16 @@
+[Unit]
+Description="Cassandra Exporter - Provides JMS metrics via a Prometheus-type endpoint"
+Documentation=https://github.com/criteo/cassandra_exporter
+Requires=network-online.target
+After=network-online.target
+ConditionFileNotEmpty={{ cassandra_exp_config_file }}
+
+[Service]
+User={{ cassandra_exp_service_user }}
+ExecStart=/usr/bin/java -jar {{ cassandra_exp_install_dir }}/cassandra_exporter.jar {{ cassandra_exp_config_file }}
+Restart=on-failure
+RuntimeDirectory={{ cassandra_exp_service_name }}
+PermissionsStartOnly=True
+
+[Install]
+WantedBy=multi-user.target

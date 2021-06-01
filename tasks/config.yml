@@ -1,0 +1,14 @@
+---
+- name: Create config directory
+  file:
+    path: '{{ cassandra_exp_config_dir }}'
+    owner: '{{ cassandra_exp_service_user }}'
+    group: 'adm'
+    state: 'directory'
+
+- name: Create exporter config
+  template:
+    src: 'config.yml.j2'
+    dest: '{{ cassandra_exp_config_file }}'
+    owner: '{{ cassandra_exp_service_user }}'
+    group: 'adm'

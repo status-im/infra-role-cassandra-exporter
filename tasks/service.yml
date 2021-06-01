@@ -1,0 +1,15 @@
+---
+- name: Create systemd Unit file
+  template:
+    src: 'exporter.service.j2'
+    dest: '/lib/systemd/system/{{ cassandra_exp_service_name }}.service'
+    mode: 0644
+
+- name: Reload Systemctl
+  command: systemctl daemon-reload
+
+- name: Start Service
+  service:
+    name: '{{ cassandra_exp_service_name }}.service'
+    state: restarted
+    enabled: true
